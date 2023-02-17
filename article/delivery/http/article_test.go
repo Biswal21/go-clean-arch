@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/bxcodec/faker"
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -39,7 +39,7 @@ func TestFetch(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 	handler := articleHttp.ArticleHandler{
-		AUsecase: mockUCase,
+		ArtUsecase: mockUCase,
 	}
 	err = handler.FetchArticle(c)
 	require.NoError(t, err)
@@ -63,7 +63,7 @@ func TestFetchError(t *testing.T) {
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 	handler := articleHttp.ArticleHandler{
-		AUsecase: mockUCase,
+		ArtUsecase: mockUCase,
 	}
 	err = handler.FetchArticle(c)
 	require.NoError(t, err)
@@ -95,7 +95,7 @@ func TestGetByID(t *testing.T) {
 	c.SetParamNames("id")
 	c.SetParamValues(strconv.Itoa(num))
 	handler := articleHttp.ArticleHandler{
-		AUsecase: mockUCase,
+		ArtUsecase: mockUCase,
 	}
 	err = handler.GetByID(c)
 	require.NoError(t, err)
@@ -131,7 +131,7 @@ func TestStore(t *testing.T) {
 	c.SetPath("/article")
 
 	handler := articleHttp.ArticleHandler{
-		AUsecase: mockUCase,
+		ArtUsecase: mockUCase,
 	}
 	err = handler.Store(c)
 	require.NoError(t, err)
@@ -161,7 +161,7 @@ func TestDelete(t *testing.T) {
 	c.SetParamNames("id")
 	c.SetParamValues(strconv.Itoa(num))
 	handler := articleHttp.ArticleHandler{
-		AUsecase: mockUCase,
+		ArtUsecase: mockUCase,
 	}
 	err = handler.Delete(c)
 	require.NoError(t, err)

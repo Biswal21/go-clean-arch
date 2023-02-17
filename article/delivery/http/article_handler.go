@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 	validator "gopkg.in/go-playground/validator.v9"
 
@@ -18,13 +18,13 @@ type ResponseError struct {
 
 // ArticleHandler  represent the httphandler for article
 type ArticleHandler struct {
-	AUsecase domain.ArticleUsecase
+	ArtUsecase domain.ArticleUsecase
 }
 
 // NewArticleHandler will initialize the articles/ resources endpoint
 func NewArticleHandler(e *echo.Echo, us domain.ArticleUsecase) {
 	handler := &ArticleHandler{
-		AUsecase: us,
+		ArtUsecase: us,
 	}
 	e.GET("/articles", handler.FetchArticle)
 	e.POST("/articles", handler.Store)
@@ -39,7 +39,7 @@ func (a *ArticleHandler) FetchArticle(c echo.Context) error {
 	cursor := c.QueryParam("cursor")
 	ctx := c.Request().Context()
 
-	listAr, nextCursor, err := a.AUsecase.Fetch(ctx, cursor, int64(num))
+	listAr, nextCursor, err := a.ArtUsecase.Fetch(ctx, cursor, int64(num))
 	if err != nil {
 		return c.JSON(getStatusCode(err), ResponseError{Message: err.Error()})
 	}
@@ -58,7 +58,7 @@ func (a *ArticleHandler) GetByID(c echo.Context) error {
 	id := int64(idP)
 	ctx := c.Request().Context()
 
-	art, err := a.AUsecase.GetByID(ctx, id)
+	art, err := a.ArtUsecase.GetByID(ctx, id)
 	if err != nil {
 		return c.JSON(getStatusCode(err), ResponseError{Message: err.Error()})
 	}
@@ -89,7 +89,7 @@ func (a *ArticleHandler) Store(c echo.Context) (err error) {
 	}
 
 	ctx := c.Request().Context()
-	err = a.AUsecase.Store(ctx, &article)
+	err = a.ArtUsecase.Store(ctx, &article)
 	if err != nil {
 		return c.JSON(getStatusCode(err), ResponseError{Message: err.Error()})
 	}
@@ -107,7 +107,7 @@ func (a *ArticleHandler) Delete(c echo.Context) error {
 	id := int64(idP)
 	ctx := c.Request().Context()
 
-	err = a.AUsecase.Delete(ctx, id)
+	err = a.ArtUsecase.Delete(ctx, id)
 	if err != nil {
 		return c.JSON(getStatusCode(err), ResponseError{Message: err.Error()})
 	}
